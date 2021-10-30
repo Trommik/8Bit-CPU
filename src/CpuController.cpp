@@ -61,6 +61,24 @@ void CpuController::reset()
     shiftOutControlWord(controlWord, 0x00);
 }
 
+void CpuController::setLoadCodeMode(boolean loadCode)
+{
+    if (executeMode)
+        return;
+
+    reset();
+    loadCodeMode = loadCode;
+}
+
+void CpuController::setExecuteMode(boolean execute)
+{
+    if (loadCodeMode)
+        return;
+        
+    reset();
+    executeMode = execute;
+}
+
 void CpuController::handleInstructions()
 {
     // If there was no clock cylce detected return

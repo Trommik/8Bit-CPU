@@ -77,25 +77,13 @@ public:
     void loadCodeToRam(uint8_t buffer[], uint8_t size);
 
     /* Sets the cpu controller into load code mode to load external code into RAM. */
-    void setLoadCodeMode(boolean loadCode)
-    {
-        if (executeMode)
-            return;
-
-        loadCodeMode = loadCode;
-    }
+    void setLoadCodeMode(boolean loadCode);
 
     /* Returns if the cpu controller is in load code mode. */
     boolean getLoadCodeMode() { return loadCodeMode; }
 
     /* Sets the cpu controller into execute mode to execute instructions from the instruction register. */
-    void setExecuteMode(boolean execute)
-    {
-        if (loadCodeMode)
-            return;
-            
-        executeMode = execute;
-    }
+    void setExecuteMode(boolean execute);
 
     /* Returns if the cpu controller is in execute mode. */
     boolean getExecuteMode() { return executeMode; }

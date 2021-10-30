@@ -12,26 +12,28 @@
 // ##############################################
 // Here are all different signals in the control word defined.
 // ##############################################
-#define C_HLT 0b1100000011011000  // Halt clock
-#define C_JMP 0b0000000011011000  // Jump (program counter in)
-#define C_CE  0b0110000011011000  // Program counter enable
-#define C_AI  0b0101000011011000  // A register in
-#define C_BI  0b0100100011011000  // B register in
+#define C_OFF 0b0001101100000010  // Everything off
+              
+#define C_HLT 0b0001101100000011  // Halt clock
+#define C_JMP 0b0001101100000000  // Jump (program counter in)
+#define C_CE  0b0001101100000110  // Program counter enable
+#define C_AI  0b0001101100001010  // A register in
+#define C_BI  0b0001101100010010  // B register in
+// SPARE      
 // SPARE
-// SPARE
-#define C_RI  0b0100000111011000  // Random access memory in
-#define C_MI  0b0100000001011000  // Memory address register in
-#define C_FI  0b0100000010011000  // Flags register in
-#define C_SU  0b0100000011111000  // ALU subtract
-#define C_IRI 0b0100000011001000  // Instruction register in
-#define C_IOI 0b0100000011010000  // Instruction-Op register in
-#define C_CO  0b0100000011011001  // Program counter out
-#define C_AO  0b0100000011011010  // A register out
-#define C_BO  0b0100000011011011  // B register out
-#define C_EO  0b0100000011011100  // ∑ register out
-#define C_RO  0b0100000011011101  // Random access memory out
-#define C_IOO 0b0100000011011110  // Instruction-Op register out
-#define C_EPO 0b0100000011011111  // External programer out
+#define C_RI  0b0001101110000010  // Random access memory in
+#define C_MI  0b0001101000000010  // Memory address register in
+#define C_FI  0b0001100100000010  // Flags register in
+#define C_SU  0b0001111100000010  // ALU subtract
+#define C_IRI 0b0001001100000010  // Instruction register in
+#define C_IOI 0b0000101100000010  // Instruction-Op register in
+#define C_CO  0b1001101100000010  // Program counter out
+#define C_AO  0b0101101100000010  // A register out
+#define C_BO  0b1101101100000010  // B register out
+#define C_EO  0b0011101100000010  // ∑ register out
+#define C_RO  0b1011101100000010  // Random access memory out
+#define C_IOO 0b0111101100000010  // Instruction-Op register out
+#define C_EPO 0b1111101100000010  // External programer out
 
 // ##############################################
 // Here are all different ALU flags defined.

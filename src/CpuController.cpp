@@ -20,7 +20,7 @@ void CpuController::init()
     controlWord = UCode.getControlWord(instruction, flags, instructionStep);
 
     // Clear the last control word
-    shiftOutControlWord(0x00, 0x00);
+    shiftOutControlWord(C_OFF, 0x00);
 }
 
 void CpuController::cpuClockCallback() 

@@ -9,18 +9,7 @@ void CpuController::init()
     initShiftRegisters();
     initClockInterrupt();
 
-    // Fetch the current instruction
-    uint8_t instructionBuffer[1];
-    shiftInInstructionBuffer(instructionBuffer, sizeof(instructionBuffer));
-
-    // Set the current instruction
-    instruction = instructionBuffer[0];
-
-    // Set the current control word depending on the instruction, flags and step
-    controlWord = UCode.getControlWord(instruction, flags, instructionStep);
-
-    // Clear the last control word
-    shiftOutControlWord(controlWord, 0x00);
+    reset();
 }
 
 void CpuController::cpuClockCallback() 
@@ -58,7 +47,7 @@ void CpuController::reset()
     controlWord = UCode.getControlWord(instruction, flags, instructionStep);
 
     // Clear the last control word
-    shiftOutControlWord(controlWord, 0x00);
+    shiftOutControlWord(0x00, 0x00);
 }
 
 void CpuController::setLoadCodeMode(boolean loadCode)

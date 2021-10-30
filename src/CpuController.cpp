@@ -113,7 +113,7 @@ void CpuController::executeInstruction()
     shiftOutControlWord(controlWord, 0x00);
 
     // Debug statement
-    Serial.print("Executed clock cycle!\n\tinstruction: 0x");
+    Serial.print("Executed instruction!\n\tinstruction: 0x");
     Serial.print(instruction, HEX);
     Serial.print("; step: ");
     Serial.print(instructionStep, BIN);

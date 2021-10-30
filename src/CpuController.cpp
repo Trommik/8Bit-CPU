@@ -20,7 +20,7 @@ void CpuController::init()
     controlWord = UCode.getControlWord(instruction, flags, instructionStep);
 
     // Clear the last control word
-    shiftOutControlWord(C_OFF, 0x00);
+    shiftOutControlWord(0x00, 0x00);
 }
 
 void CpuController::cpuClockCallback() 
@@ -123,10 +123,10 @@ void CpuController::shiftOutControlWord(uint16_t controlWord, uint8_t busValue)
     shiftOut(DATA_PIN, CLOCK_PIN, MSBFIRST, busValue);
 
     // Shift out the upper byte of the uint16_t
-    shiftOut(DATA_PIN, CLOCK_PIN, MSBFIRST, controlWord >> 8);
+    shiftOut(DATA_PIN, CLOCK_PIN, MSBFIRST, (controlWord ^ C_INV) >> 8);
 
     // Shift out the lower byte of the uint16_t
-    shiftOut(DATA_PIN, CLOCK_PIN, MSBFIRST, controlWord & 0xFF);
+    shiftOut(DATA_PIN, CLOCK_PIN, MSBFIRST, (controlWord ^ C_INV) & 0xFF);
 
     // Latch the data
     digitalWrite(OUT_LATCH_PIN, HIGH);

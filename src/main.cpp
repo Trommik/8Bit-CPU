@@ -66,10 +66,10 @@ void postMode()
 /* This sets code the cpu controller should load into RAM. */
 void postCode()
 {
-	// Check if the cpu is in execution mode 
-	if (cpu.getExecuteMode())
+	// Check if the cpu is in load code mode 
+	if (!cpu.getLoadCodeMode())
 	{
-		server.send(405, FPSTR(RESPONSE_TEXT), F("CPU is in execute mode!"));
+		server.send(405, FPSTR(RESPONSE_TEXT), F("CPU is not in load code mode!"));
 		return;
 	}
 
@@ -97,27 +97,25 @@ void postCode()
 
 	copyArray(array, buffer, array.size());
 	
-	Serial.println();
-	Serial.print("Received code array of ");
-	Serial.print(sizeof(buffer));
-	Serial.print(" byte(s)!\n\tContent: { ");
+	// Load code into RAM
+	cpu.loadCodeToRam(buffer, sizeof(buffer));
+
+	// Create the response text
+	String startMessage = F("Succesfully received code array of ");
+	String message = startMessage + sizeof(buffer);
+
+	message += F(" byte(s).\n\tContent: { ");
 
 	for(uint8_t i = 0; i < sizeof(buffer); i++)
 	{
-		Serial.print("0x");
-		Serial.print(buffer[i], HEX);
-		Serial.print(", ");
+		message += "0x";
+		message += String(buffer[i], HEX);
+		message += ", ";
 	}
 
-	Serial.println("}");
+	message += "}";
 
-	// Load code into RAM!
-	cpu.loadCodeToRam(buffer, sizeof(buffer));
-
-
-	String startMessage =  F("Succesfully received code array of ");
-	String endMessage = F(" byte(s).");
-	server.send(200, FPSTR(RESPONSE_TEXT), startMessage + array.size() + endMessage);
+	server.send(200, FPSTR(RESPONSE_TEXT), message);
 }
 
 /* This returns the current control word of the cpu controller. */

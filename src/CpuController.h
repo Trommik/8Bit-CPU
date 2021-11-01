@@ -51,11 +51,11 @@ private:
     /* This will try to load the given code into RAM everytime a rising clock pulse is detected. */
     void executeLoadCode();
 
-    /* This reads the inputs of 74HC165 shift registers and stores them in the given buffer. */
+    /* This will shift in the inputs of the 74HC165 shift registers and stores them in the given buffer. */
     void shiftInInstructionBuffer(uint8_t buffer[], uint8_t size);
 
     /* This will shift out the control word and bus value to three 74HC595 shift registers. */
-    void shiftOutControlWord(uint16_t controlWord, uint8_t busValue);
+    void shiftOutControlBuffer(uint16_t controlWord, uint8_t busValue);
 
 public:
     /* The microcode the cpu uses. */

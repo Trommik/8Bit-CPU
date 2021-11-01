@@ -51,7 +51,7 @@ void CpuController::reset()
     controlWord = UCode.getControlWord(instruction, flags, instructionStep);
 
     // Clear the last control word
-    shiftOutControlWord(0x00, 0x00);
+    shiftOutControlBuffer(0x00, 0x00);
 }
 
 void CpuController::setLoadCodeMode(boolean loadCode)
@@ -102,7 +102,7 @@ void CpuController::handleInstructions()
         clockRising = false;
 
         // Set the ready flag when the clock is rising
-        if (executeMode) shiftOutControlWord(controlWord | C_RDY, 0x00);
+        if (executeMode) shiftOutControlBuffer(controlWord | C_RDY, 0x00);
     }
 }
 
@@ -123,7 +123,7 @@ void CpuController::executeInstruction()
     controlWord = UCode.getControlWord(instruction, flags, instructionStep);
 
     // Shift out the control word
-    shiftOutControlWord(controlWord, 0x00);
+    shiftOutControlBuffer(controlWord, 0x00);
 
     // Debug statement
     Serial.print("Executed instruction!\n\tinstruction: 0x");
@@ -147,7 +147,7 @@ void CpuController::executeLoadCode()
         controlWord = 0x00;
 
         // Shift out the control word
-        shiftOutControlWord(controlWord, 0x00);
+        shiftOutControlBuffer(controlWord, 0x00);
 
         return;
     }
@@ -162,7 +162,7 @@ void CpuController::executeLoadCode()
         controlWord = C_EPO | C_MI;
 
         // Shift out the control word and set the ready flag
-        shiftOutControlWord(controlWord | C_RDY, codeLoaded);
+        shiftOutControlBuffer(controlWord | C_RDY, codeLoaded);
         
         // Set the address setup flag
         addressSetup = true;
@@ -173,7 +173,7 @@ void CpuController::executeLoadCode()
         controlWord = C_EPO | C_RI;
 
         // Shift out the control word and set the ready flag
-        shiftOutControlWord(controlWord | C_RDY, codeToLoad);
+        shiftOutControlBuffer(controlWord | C_RDY, codeToLoad);
 
         // Debug statement
         Serial.print("Code loaded!\n\tcodeToLoad: 0x");
@@ -248,7 +248,7 @@ void CpuController::shiftInInstructionBuffer(uint8_t buffer[], uint8_t size)
     }
 }
 
-void CpuController::shiftOutControlWord(uint16_t controlWord, uint8_t busValue)
+void CpuController::shiftOutControlBuffer(uint16_t controlWord, uint8_t busValue)
 {
     pinMode(DATA_PIN, OUTPUT);
     digitalWrite(OUT_LATCH_PIN, LOW);

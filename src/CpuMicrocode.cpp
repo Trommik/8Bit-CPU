@@ -3,25 +3,26 @@
 void CpuMicrocode::init()
 {
     /* Initialize all different instructions and their microcodes */
-    auto nop = std::initializer_list<uint16_t>({C_MI | C_CO, C_RO | C_IRI | C_CE, 0, 0, 0, 0, 0});     // NOP
-    auto hlt = std::initializer_list<uint16_t>({C_MI | C_CO, C_RO | C_IRI | C_CE, C_HLT, 0, 0, 0, 0}); // HLT
+    auto nop = std::initializer_list<uint16_t>({C_CO | C_MI, C_RO | C_IRI | C_CE, 0, 0, 0, 0, 0});     // NOP
+    auto hlt = std::initializer_list<uint16_t>({C_CO | C_MI, C_RO | C_IRI | C_CE, C_HLT, 0, 0, 0, 0}); // HLT
 
-    auto jmp = std::initializer_list<uint16_t>({C_MI | C_CO, C_RO | C_IRI | C_CE, C_MI | C_CO, C_RO | C_IOI | C_CE, C_IOO | C_JMP, 0, 0}); // JMP
-    auto jmc = std::initializer_list<uint16_t>({C_MI | C_CO, C_RO | C_IRI | C_CE, C_MI | C_CO, C_RO | C_IOI | C_CE, 0, 0, 0});             // JMC
-    auto jmz = std::initializer_list<uint16_t>({C_MI | C_CO, C_RO | C_IRI | C_CE, C_MI | C_CO, C_RO | C_IOI | C_CE, 0, 0, 0});             // JMZ
-    auto jnz = std::initializer_list<uint16_t>({C_MI | C_CO, C_RO | C_IRI | C_CE, C_MI | C_CO, C_RO | C_IOI | C_CE, C_IOO | C_JMP, 0, 0}); // JNZ
+    auto jmp = std::initializer_list<uint16_t>({C_CO | C_MI, C_RO | C_IRI | C_CE, C_CO | C_MI, C_RO | C_IOI | C_CE, C_IOO | C_JMP, 0, 0}); // JMP
+    auto jmc = std::initializer_list<uint16_t>({C_CO | C_MI, C_RO | C_IRI | C_CE, C_CO | C_MI, C_RO | C_IOI | C_CE, 0, 0, 0});             // JMC
+    auto jmz = std::initializer_list<uint16_t>({C_CO | C_MI, C_RO | C_IRI | C_CE, C_CO | C_MI, C_RO | C_IOI | C_CE, 0, 0, 0});             // JMZ
+    auto jnz = std::initializer_list<uint16_t>({C_CO | C_MI, C_RO | C_IRI | C_CE, C_CO | C_MI, C_RO | C_IOI | C_CE, C_IOO | C_JMP, 0, 0}); // JNZ
 
-    auto lda = std::initializer_list<uint16_t>({C_MI | C_CO, C_RO | C_IRI | C_CE, C_MI | C_CO, C_RO | C_IOI | C_CE, C_MI | C_IOO, C_AI | C_RO, 0}); // LDA
-    auto ldb = std::initializer_list<uint16_t>({C_MI | C_CO, C_RO | C_IRI | C_CE, C_MI | C_CO, C_RO | C_IOI | C_CE, C_MI | C_IOO, C_BI | C_RO, 0}); // LDB
-    auto sta = std::initializer_list<uint16_t>({C_MI | C_CO, C_RO | C_IRI | C_CE, C_MI | C_CO, C_RO | C_IOI | C_CE, C_MI | C_IOO, C_RI | C_AO, 0}); // STA
-    auto stb = std::initializer_list<uint16_t>({C_MI | C_CO, C_RO | C_IRI | C_CE, C_MI | C_CO, C_RO | C_IOI | C_CE, C_MI | C_IOO, C_RI | C_BO, 0}); // STB
-    auto ste = std::initializer_list<uint16_t>({C_MI | C_CO, C_RO | C_IRI | C_CE, C_MI | C_CO, C_RO | C_IOI | C_CE, C_MI | C_IOO, C_RI | C_EO, 0}); // STE
+    auto lda = std::initializer_list<uint16_t>({C_CO | C_MI, C_RO | C_IRI | C_CE, C_CO | C_MI, C_RO | C_IOI | C_CE, C_IOO | C_MI , C_RO | C_AI, 0}); // LDA
+    auto ldb = std::initializer_list<uint16_t>({C_CO | C_MI, C_RO | C_IRI | C_CE, C_CO | C_MI, C_RO | C_IOI | C_CE, C_IOO | C_MI , C_RO | C_BI, 0}); // LDB
+    auto sta = std::initializer_list<uint16_t>({C_CO | C_MI, C_RO | C_IRI | C_CE, C_CO | C_MI, C_RO | C_IOI | C_CE, C_IOO | C_MI , C_AO | C_RI, 0}); // STA
+    auto stb = std::initializer_list<uint16_t>({C_CO | C_MI, C_RO | C_IRI | C_CE, C_CO | C_MI, C_RO | C_IOI | C_CE, C_IOO | C_MI , C_BO | C_RI, 0}); // STB
+    auto ste = std::initializer_list<uint16_t>({C_CO | C_MI, C_RO | C_IRI | C_CE, C_CO | C_MI, C_RO | C_IOI | C_CE, C_IOO | C_MI , C_EO | C_RI, 0}); // STE
 
-    auto add = std::initializer_list<uint16_t>({C_MI | C_CO, C_RO | C_IRI | C_CE, C_AI | C_EO | C_FI, 0, 0, 0, 0});        // ADD
-    auto sub = std::initializer_list<uint16_t>({C_MI | C_CO, C_RO | C_IRI | C_CE, C_AI | C_SU | C_EO | C_FI, 0, 0, 0, 0}); // SUB
+    auto add = std::initializer_list<uint16_t>({C_CO | C_MI, C_RO | C_IRI | C_CE, C_EO | C_AI | C_FI, 0, 0, 0, 0});        // ADD
+    auto sub = std::initializer_list<uint16_t>({C_CO | C_MI, C_RO | C_IRI | C_CE, C_EO | C_AI | C_FI | C_SU, 0, 0, 0, 0}); // SUB
 
-    auto tab = std::initializer_list<uint16_t>({C_MI | C_CO, C_RO | C_IRI | C_CE, C_BI | C_AO, 0, 0, 0, 0}); // TAB
-    auto tba = std::initializer_list<uint16_t>({C_MI | C_CO, C_RO | C_IRI | C_CE, C_AI | C_BO, 0, 0, 0, 0}); // TBA
+    auto tab = std::initializer_list<uint16_t>({C_CO | C_MI, C_RO | C_IRI | C_CE, C_AO | C_BI, 0, 0, 0, 0}); // TAB
+    auto tba = std::initializer_list<uint16_t>({C_CO | C_MI, C_RO | C_IRI | C_CE, C_BO | C_AI, 0, 0, 0, 0}); // TBA
+
 
     // ZF = 0, CF = 0
     std::copy(nop.begin(), nop.end(), UCODE[FLAGS_Z0C0][NOP]);

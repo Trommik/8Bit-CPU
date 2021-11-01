@@ -1,6 +1,7 @@
 #include "CpuController.h"
 
-volatile boolean CpuController::clockDetected = false;
+volatile boolean CpuController::clockFalling = false;
+volatile boolean CpuController::clockRising = false;
 
 void CpuController::init()
 {
@@ -13,8 +14,11 @@ void CpuController::init()
 }
 
 void CpuController::cpuClockCallback() 
-{ 
-    clockDetected = true;
+{
+    if (!digitalRead(CPU_CLOCK_PIN))
+        clockFalling = true;
+    else
+        clockRising = true;
 }
 
 void CpuController::initShiftRegisters()
@@ -30,7 +34,7 @@ void CpuController::initClockInterrupt()
 {
     // Attach a pin interupt to the cpu clock rising edge
     pinMode(CPU_CLOCK_PIN, INPUT_PULLUP);
-    attachInterrupt(digitalPinToInterrupt(CPU_CLOCK_PIN), cpuClockCallback, RISING);
+    attachInterrupt(digitalPinToInterrupt(CPU_CLOCK_PIN), cpuClockCallback, CHANGE);
 }
 
 void CpuController::reset()
@@ -71,15 +75,35 @@ void CpuController::setExecuteMode(boolean execute)
 void CpuController::handleInstructions()
 {
     // If there was no clock cylce detected return
-    if (!clockDetected)
+    if (!clockFalling && !clockRising)
         return;
 
-    // Reset the detected clock cylce
-    clockDetected = false;
+    // Serial.print("Handle instructions: \tCLK RISING: ");
+    // Serial.print(clockRising);
+    // Serial.print("\tCLK FALLING: ");
+    // Serial.print(clockFalling);
+    // Serial.println();
 
-    // Check the mode and execute the 
-    if (executeMode) executeInstruction();
-    else if (loadCodeMode) executeLoadCode();
+    // Handle falling clock
+    if (clockFalling)
+    {
+        // Reset the detected clock cylce
+        clockFalling = false;
+
+        // Check the mode and execute its current instruction
+        if (executeMode) executeInstruction();
+        else if (loadCodeMode) executeLoadCode();
+    }
+
+    // Handle rising clock
+    if (clockRising)
+    {
+        // Reset the detected clock cylce
+        clockRising = false;
+
+        // Set the ready flag when the clock is rising
+        if (executeMode) shiftOutControlWord(controlWord | C_RDY, 0x00);
+    }
 }
 
 void CpuController::executeInstruction()
@@ -137,8 +161,8 @@ void CpuController::executeLoadCode()
         // Write the address into the MAR
         controlWord = C_EPO | C_MI;
 
-        // Shift out the control word
-        shiftOutControlWord(controlWord, codeLoaded);
+        // Shift out the control word and set the ready flag
+        shiftOutControlWord(controlWord | C_RDY, codeLoaded);
         
         // Set the address setup flag
         addressSetup = true;
@@ -148,8 +172,8 @@ void CpuController::executeLoadCode()
         // Write the code to load into RAM
         controlWord = C_EPO | C_RI;
 
-        // Shift out the control word
-        shiftOutControlWord(controlWord, codeToLoad);
+        // Shift out the control word and set the ready flag
+        shiftOutControlWord(controlWord | C_RDY, codeToLoad);
 
         // Debug statement
         Serial.print("Code loaded!\n\tcodeToLoad: 0x");

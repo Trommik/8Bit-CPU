@@ -30,8 +30,11 @@ private:
     uint8_t instruction = 0x00;
     uint8_t instructionStep = 0x00;
 
-    /* Gets set when a risign edge of the cpu clock was detected. */
-    static volatile boolean clockDetected;
+    /* Gets set when a falling edge of the cpu clock was detected. */
+    static volatile boolean clockFalling;
+
+    /* Gets set when a rising edge of the cpu clock was detected. */
+    static volatile boolean clockRising;
 
     /* Gets called whenever a rising edge of the CPU clock is detected. */
     static void IRAM_ATTR cpuClockCallback();

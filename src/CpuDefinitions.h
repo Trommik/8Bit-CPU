@@ -19,7 +19,7 @@
 #define C_CE  0b0000000000000100 // Program counter enable
 #define C_AI  0b0000000000001000 // A register in
 #define C_BI  0b0000000000010000 // B register in
-#define C_RDY 0b0000000000100000 // Clock ready out
+#define C_RDY 0b0000000000100000 // Control ready flag
 // SPARE
 #define C_RI  0b0000000010000000 // Random access memory in
 #define C_MI  0b0000000100000000 // Memory address register in

@@ -11,7 +11,6 @@
 class CpuController
 {
 private:
-    const uint8_t maxInstructionStep = 0b101;
 
     boolean executeMode = false;
     boolean loadCodeMode = false;

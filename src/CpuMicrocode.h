@@ -14,6 +14,9 @@ private:
 
 public:
 
+    /* The maximum number of steps each microcode consists of. */
+    const uint8_t MaxInstructionStep = 0b100;
+
     /* This initializes the UCODE structure with the microcodes for each instruction. */
     void init();
 

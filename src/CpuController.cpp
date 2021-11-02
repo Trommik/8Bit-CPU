@@ -109,7 +109,7 @@ void CpuController::handleInstructions()
 void CpuController::executeInstruction()
 {
     // Reset the instruction step back to zero
-    if (instructionStep > maxInstructionStep)
+    if (instructionStep > UCode.MaxInstructionStep)
         instructionStep = 0;
 
     // Fetch the current instruction

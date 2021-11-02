@@ -6,16 +6,16 @@ void CpuMicrocode::init()
     auto nop = std::initializer_list<uint16_t>({C_CO | C_MI, C_RO | C_IRI | C_CE, 0, 0, 0, 0, 0});     // NOP
     auto hlt = std::initializer_list<uint16_t>({C_CO | C_MI, C_RO | C_IRI | C_CE, C_HLT, 0, 0, 0, 0}); // HLT
 
-    auto jmp = std::initializer_list<uint16_t>({C_CO | C_MI, C_RO | C_IRI | C_CE, C_CO | C_MI, C_RO | C_IOI | C_CE, C_IOO | C_JMP, 0, 0}); // JMP
-    auto jmc = std::initializer_list<uint16_t>({C_CO | C_MI, C_RO | C_IRI | C_CE, C_CO | C_MI, C_RO | C_IOI | C_CE, 0, 0, 0});             // JMC
-    auto jmz = std::initializer_list<uint16_t>({C_CO | C_MI, C_RO | C_IRI | C_CE, C_CO | C_MI, C_RO | C_IOI | C_CE, 0, 0, 0});             // JMZ
-    auto jnz = std::initializer_list<uint16_t>({C_CO | C_MI, C_RO | C_IRI | C_CE, C_CO | C_MI, C_RO | C_IOI | C_CE, C_IOO | C_JMP, 0, 0}); // JNZ
+    auto jmp = std::initializer_list<uint16_t>({C_CO | C_MI, C_RO | C_IRI | C_CE, C_CO | C_MI, C_RO | C_JMP | C_CE, 0, 0, 0});  // JMP
+    auto jmc = std::initializer_list<uint16_t>({C_CO | C_MI, C_RO | C_IRI | C_CE, C_CO | C_MI, C_CE, 0, 0, 0});                 // JMC
+    auto jmz = std::initializer_list<uint16_t>({C_CO | C_MI, C_RO | C_IRI | C_CE, C_CO | C_MI, C_CE, 0, 0, 0});                 // JMZ
+    auto jnz = std::initializer_list<uint16_t>({C_CO | C_MI, C_RO | C_IRI | C_CE, C_CO | C_MI, C_RO | C_JMP | C_CE, 0, 0, 0});  // JNZ
 
-    auto lda = std::initializer_list<uint16_t>({C_CO | C_MI, C_RO | C_IRI | C_CE, C_CO | C_MI, C_RO | C_IOI | C_CE, C_IOO | C_MI , C_RO | C_AI, 0}); // LDA
-    auto ldb = std::initializer_list<uint16_t>({C_CO | C_MI, C_RO | C_IRI | C_CE, C_CO | C_MI, C_RO | C_IOI | C_CE, C_IOO | C_MI , C_RO | C_BI, 0}); // LDB
-    auto sta = std::initializer_list<uint16_t>({C_CO | C_MI, C_RO | C_IRI | C_CE, C_CO | C_MI, C_RO | C_IOI | C_CE, C_IOO | C_MI , C_AO | C_RI, 0}); // STA
-    auto stb = std::initializer_list<uint16_t>({C_CO | C_MI, C_RO | C_IRI | C_CE, C_CO | C_MI, C_RO | C_IOI | C_CE, C_IOO | C_MI , C_BO | C_RI, 0}); // STB
-    auto ste = std::initializer_list<uint16_t>({C_CO | C_MI, C_RO | C_IRI | C_CE, C_CO | C_MI, C_RO | C_IOI | C_CE, C_IOO | C_MI , C_EO | C_RI, 0}); // STE
+    auto lda = std::initializer_list<uint16_t>({C_CO | C_MI, C_RO | C_IRI | C_CE, C_CO | C_MI, C_RO | C_MI | C_CE, C_RO | C_AI, 0, 0}); // LDA
+    auto ldb = std::initializer_list<uint16_t>({C_CO | C_MI, C_RO | C_IRI | C_CE, C_CO | C_MI, C_RO | C_MI | C_CE, C_RO | C_BI, 0, 0}); // LDB
+    auto sta = std::initializer_list<uint16_t>({C_CO | C_MI, C_RO | C_IRI | C_CE, C_CO | C_MI, C_RO | C_MI | C_CE, C_AO | C_RI, 0, 0}); // STA
+    auto stb = std::initializer_list<uint16_t>({C_CO | C_MI, C_RO | C_IRI | C_CE, C_CO | C_MI, C_RO | C_MI | C_CE, C_BO | C_RI, 0, 0}); // STB
+    auto ste = std::initializer_list<uint16_t>({C_CO | C_MI, C_RO | C_IRI | C_CE, C_CO | C_MI, C_RO | C_MI | C_CE, C_EO | C_RI, 0, 0}); // STE
 
     auto add = std::initializer_list<uint16_t>({C_CO | C_MI, C_RO | C_IRI | C_CE, C_EO | C_AI | C_FI, 0, 0, 0, 0});        // ADD
     auto sub = std::initializer_list<uint16_t>({C_CO | C_MI, C_RO | C_IRI | C_CE, C_EO | C_AI | C_FI | C_SU, 0, 0, 0, 0}); // SUB
@@ -49,22 +49,22 @@ void CpuMicrocode::init()
     memcpy(UCODE[FLAGS_Z0C1], UCODE[FLAGS_Z0C0], sizeof(UCODE[FLAGS_Z0C0])); // ZF = 0, CF = 1
 
     // Setup command for jump when carry
-    UCODE[FLAGS_Z0C1][JMC][4] = C_IOO | C_JMP;
+    UCODE[FLAGS_Z0C1][JMC][4] = C_RO | C_JMP | C_CE;
 
     memcpy(UCODE[FLAGS_Z1C0], UCODE[FLAGS_Z0C0], sizeof(UCODE[FLAGS_Z0C0])); // ZF = 1, CF = 0
 
     // Setup commands for jump when zero and jump when not zero
-    UCODE[FLAGS_Z1C0][JMZ][4] = C_IOO | C_JMP;
-    UCODE[FLAGS_Z1C0][JNZ][4] = 0;
+    UCODE[FLAGS_Z1C0][JMZ][4] = C_RO | C_JMP | C_CE;
+    UCODE[FLAGS_Z1C0][JNZ][4] = C_CE;
 
     memcpy(UCODE[FLAGS_Z1C1], UCODE[FLAGS_Z0C0], sizeof(UCODE[FLAGS_Z0C0])); // ZF = 1, CF = 1
 
     // Setup command for jump when carry
-    UCODE[FLAGS_Z1C1][JMC][4] = C_IOO | C_JMP;
+    UCODE[FLAGS_Z1C1][JMC][4] = C_RO | C_JMP | C_CE;
 
     // Setup commands for jump when zero and jump when not zero
-    UCODE[FLAGS_Z1C1][JMZ][4] = C_IOO | C_JMP;
-    UCODE[FLAGS_Z1C0][JNZ][4] = 0;
+    UCODE[FLAGS_Z1C1][JMZ][4] = C_RO | C_JMP | C_CE;
+    UCODE[FLAGS_Z1C0][JNZ][4] = C_CE;
 }
 
 uint16_t CpuMicrocode::getControlWord(uint8_t instruction, uint8_t flags, uint8_t step)

@@ -22,7 +22,8 @@ void CpuMicrocode::init()
 
     auto tab = std::initializer_list<uint16_t>({C_CO | C_MI, C_RO | C_IRI | C_CE, C_AO | C_BI, 0, 0, 0, 0}); // TAB
     auto tba = std::initializer_list<uint16_t>({C_CO | C_MI, C_RO | C_IRI | C_CE, C_BO | C_AI, 0, 0, 0, 0}); // TBA
-
+    auto tao = std::initializer_list<uint16_t>({C_CO | C_MI, C_RO | C_IRI | C_CE, C_AO | C_OI, 0, 0, 0, 0}); // TAO
+    auto tbo = std::initializer_list<uint16_t>({C_CO | C_MI, C_RO | C_IRI | C_CE, C_BO | C_OI, 0, 0, 0, 0}); // TBO
 
     // ZF = 0, CF = 0
     std::copy(nop.begin(), nop.end(), UCODE[FLAGS_Z0C0][NOP]);
@@ -44,6 +45,8 @@ void CpuMicrocode::init()
 
     std::copy(tab.begin(), tab.end(), UCODE[FLAGS_Z0C0][TAB]);
     std::copy(tba.begin(), tba.end(), UCODE[FLAGS_Z0C0][TBA]);
+    std::copy(tao.begin(), tao.end(), UCODE[FLAGS_Z0C0][TAO]);
+    std::copy(tbo.begin(), tbo.end(), UCODE[FLAGS_Z0C0][TBO]);
 
     /* Copy the default microcode table to the specific tables when flags are active */
     memcpy(UCODE[FLAGS_Z0C1], UCODE[FLAGS_Z0C0], sizeof(UCODE[FLAGS_Z0C0])); // ZF = 0, CF = 1

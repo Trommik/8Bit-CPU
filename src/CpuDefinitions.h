@@ -12,7 +12,7 @@
 // ##############################################
 // Here are all different signals in the control word defined.
 // ##############################################
-#define C_INV 0b0001101100000010 // Invert bitmask, all set bits will be inverted (Active LOW)
+#define C_INV 0b0001101101000010 // Invert bitmask, all set bits will be inverted (Active LOW)
 
 #define C_HLT 0b0000000000000001 // Halt clock
 #define C_JMP 0b0000000000000010 // Jump (program counter in)
@@ -20,7 +20,7 @@
 #define C_AI  0b0000000000001000 // A register in
 #define C_BI  0b0000000000010000 // B register in
 #define C_RDY 0b0000000000100000 // Control ready flag
-// SPARE
+#define C_OI  0b0000000001000000 // Output register in
 #define C_RI  0b0000000010000000 // Random access memory in
 #define C_MI  0b0000000100000000 // Memory address register in
 #define C_FI  0b0000001000000000 // Flags register in
@@ -62,5 +62,7 @@
 #define SUB 0x21
 #define TAB 0x30
 #define TBA 0x31
+#define TAO 0x32
+#define TBO 0x33
 
 #endif

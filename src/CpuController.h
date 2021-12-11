@@ -101,6 +101,12 @@ public:
 
     /* Returns the current control word. */
     uint16_t getControlWord() { return controlWord; }
+
+    /* Returns the amount of code to load. */
+    uint8_t getCodeToLoad() { return codeToLoad; }
+
+    /* Returns the amount of code loaded. */
+    uint8_t getCodeLoaded() { return codeLoaded; }
 };
 
 #endif

@@ -146,6 +146,21 @@ void getInstruction()
 	server.send(200, FPSTR(RESPONSE_JSON), buf);
 }
 
+/* This returns the actual amount of code to load and how many is already loaded to the cpu controller. */
+void getCodeLoadStatus()
+{
+	String buf;
+	StaticJsonDocument<255> doc;
+
+	doc["loadCodeMode"] = cpu.getLoadCodeMode();
+	doc["codeToLoad"] = cpu.getCodeToLoad();
+	doc["codeLoaded"] = cpu.getCodeLoaded();
+
+	serializeJson(doc, buf);
+
+	server.send(200, FPSTR(RESPONSE_JSON), buf);
+}
+
 /* This resets the cpu controller. */
 void postReset()
 {
@@ -201,6 +216,7 @@ void restServerRouting()
 
 	server.on(F("/controlword"), HTTP_GET, getControlWord);
 	server.on(F("/instruction"), HTTP_GET, getInstruction);
+	server.on(F("/code"), HTTP_GET, getCodeLoadStatus);
 
 	server.on(F("/settings"), HTTP_GET, getSettings);
 

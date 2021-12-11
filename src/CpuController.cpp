@@ -78,12 +78,6 @@ void CpuController::handleInstructions()
     if (!clockFalling && !clockRising)
         return;
 
-    // Serial.print("Handle instructions: \tCLK RISING: ");
-    // Serial.print(clockRising);
-    // Serial.print("\tCLK FALLING: ");
-    // Serial.print(clockFalling);
-    // Serial.println();
-
     // Handle falling clock
     if (clockFalling)
     {

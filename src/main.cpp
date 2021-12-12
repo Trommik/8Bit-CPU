@@ -205,7 +205,7 @@ void restServerRouting()
 {
 	// Server default response
 	server.on("/", HTTP_GET, []()
-			  { server.send(200, F("text/html"), F("Welcome to the REST Web Server")); });
+			  { server.send(200, F("text/html"), F("8-Bit CPU REST API v1")); });
 
 	// Server endpoints
 	server.on(F("/mode"), HTTP_GET, getMode);

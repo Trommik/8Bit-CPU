@@ -40,8 +40,8 @@
 // Here are all different ALU flags defined.
 // ##############################################
 #define FLAGS_Z0C0 0b00
-#define FLAGS_Z0C1 0b01
-#define FLAGS_Z1C0 0b10
+#define FLAGS_Z1C0 0b01
+#define FLAGS_Z0C1 0b10
 #define FLAGS_Z1C1 0b11
 
 // ##############################################

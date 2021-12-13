@@ -67,7 +67,7 @@ void CpuMicrocode::init()
 
     // Setup commands for jump when zero and jump when not zero
     UCODE[FLAGS_Z1C1][JMZ][4] = C_RO | C_JMP | C_CE;
-    UCODE[FLAGS_Z1C0][JNZ][4] = C_CE;
+    UCODE[FLAGS_Z1C1][JNZ][4] = C_CE;
 }
 
 uint16_t CpuMicrocode::getControlWord(uint8_t instruction, uint8_t flags, uint8_t step)

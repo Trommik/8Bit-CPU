@@ -107,11 +107,12 @@ void CpuController::executeInstruction()
         instructionStep = 0;
 
     // Fetch the current instruction
-    uint8_t instructionBuffer[1];
+    uint8_t instructionBuffer[2];
     shiftInInstructionBuffer(instructionBuffer, sizeof(instructionBuffer));
 
     // Set the current instruction
     instruction = instructionBuffer[0];
+    flags = instructionBuffer[1];
 
     // Set the current control word depending on the instruction, flags and step
     controlWord = UCode.getControlWord(instruction, flags, instructionStep);
@@ -122,6 +123,8 @@ void CpuController::executeInstruction()
     // Debug statement
     Serial.print("Executed instruction!\n\tinstruction: 0x");
     Serial.print(instruction, HEX);
+    Serial.print("; flags: ");
+    Serial.print(flags, BIN);
     Serial.print("; step: ");
     Serial.print(instructionStep, BIN);
     Serial.print("\n\tcontrolWord: ");
